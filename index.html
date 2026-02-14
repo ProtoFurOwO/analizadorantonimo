@@ -36,21 +36,31 @@
 
   <script>
     function detectarAntonimos(input) {
-      const antonimos = {
-        "alto": "bajo",
-        "grande": "pequeño",
-        "feliz": "triste",
-        "rápido": "lento",
-        "rapido": "lento",
-        "frío": "caliente",
-        "frio": "caliente",
-        "día": "noche",
-        "dia": "noche",
-        "bueno": "malo",
-        "fuerte": "débil",
-        "claro": "oscuro",
-        "nuevo": "viejo"
-      };
+      const paresAntonimos = [
+        ["alto", "bajo"],
+        ["grande", "pequeño"],
+        ["feliz", "triste"],
+        ["rápido", "lento"],
+        ["frío", "caliente"],
+        ["día", "noche"],
+        ["bueno", "malo"],
+        ["fuerte", "débil"],
+        ["claro", "oscuro"],
+        ["nuevo", "viejo"]
+      ];
+
+      const antonimos = {};
+
+      for (const [a, b] of paresAntonimos) {
+        antonimos[a] = b;
+        antonimos[b] = a;
+
+        const aSinTilde = a.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        const bSinTilde = b.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+        antonimos[aSinTilde] = b;
+        antonimos[bSinTilde] = a;
+      }
 
       const palabras = input.toLowerCase().match(/[a-záéíóúüñ]+/gi) || [];
       const detecciones = [];
